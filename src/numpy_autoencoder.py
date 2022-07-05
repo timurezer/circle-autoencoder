@@ -1,10 +1,11 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import random
 import copy
 
 from dataloaders import DataLoader
 from data_generator import create_data
-from examples import print_examples_np
+from plots import plot_results, print_examples_np
 
 
 class Module:
@@ -131,7 +132,7 @@ def single_pass(model, dataloader, loss_func, lr, optim=True):
     return loss_count / len(dataloader)
 
 
-def train_model(model, loss, lr, epochs, dataloaders, print_step=50):
+def train_model(model, loss, lr, epochs, dataloaders, print_step=10):
     dataloader_train, dataloader_val = dataloaders
     train_loss_all, val_loss_all = [], []
     # training loop
@@ -174,6 +175,10 @@ def main(seed=42):
 
     # train model
     train_loss, val_loss = train_model(model, loss, lr, epochs, dataloaders)
+
+    # print loss graphs
+    _, ax = plt.subplots()
+    plot_results(ax, train_loss, val_loss, label='Loss')
 
     # look at examples
     print_examples_np(model)
